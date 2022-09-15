@@ -1,2 +1,4 @@
-assets
-readme.md
+readme
+.env
+package-lock.json
+node_modules
