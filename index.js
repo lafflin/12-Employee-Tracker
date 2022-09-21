@@ -67,21 +67,21 @@ function updatePrompt() {
 			{
 				type: "list",
 				name: "updaterPrompt",
-				message: "Whose role would you like to update",
+				message: "Whose role would you like to update (by last name)",
 				choices: [
-					"Brian Stevenson",
-					"Hector Bryant",
-					"Jessica Blake",
-					"Sam Puckett",
-					"John Doe",
-					"Hannah Cross",
-					"Larry Rivas",
-					"Nola Moore",
-					"Zack Hopper",
-					"Anika Goode",
-					"Callam Gould",
-					"Norah Grey",
-					"Roshan Boyce",
+					"Stevenson",
+					"Bryant",
+					"Blake",
+					"Puckett",
+					"Doe",
+					"Cross",
+					"Rivas",
+					"Moore",
+					"Hopper",
+					"Goode",
+					"Gould",
+					"Grey",
+					"Boyce",
 				],
 			},
 		])
@@ -148,35 +148,81 @@ function viewEmployees() {
 	);
 }
 
-function fullNameGenerator() {
-	connect.query(
-		'SELECT CONCAT(`first_name`, " ", `last_name`) AS `full_name` FROM `employee`',
-		function (err, results) {
-			fullName = results;
-			console.log("Inside of Generator", fullName);
-			if (err) throw err;
-		}
-	);
-}
+// function fullNameGenerator() {
+// 	connect.query(
+// 		'SELECT CONCAT(`first_name`, " ", `last_name`) AS `full_name` FROM `employee`',
+// 		function (err, results) {
+// 			fullName = results;
+// 			// console.log("Inside of Generator", fullName);
+// 			if (err) throw err;
+// 		}
+// 	);
+// }
 
 function updateRole(updateChoice) {
-	console.log("inside of updateRole() :", updateChoice);
-	fullNameGenerator();
+	// fullNameGenerator();
 	inquirer
 		.prompt([
 			{
 				type: "list",
 				name: "roleUpdater",
 				message: `What would you like ${updateChoice}'s new role to be?`,
-				choices: ["Grocery", "Electronics", "Home"],
+				choices: [
+					"Grocery Manager",
+					"Grocery Stocker",
+					"Grocery Cashier",
+					"Electronics Manager",
+					"Electronics Stocker",
+					"Electronics Cashier",
+					"Home Manager",
+					"Home Stocker",
+					"Home Cashier",
+				],
 			},
 		])
 		// need to write the code to update the change in the db
-		.then(function ({ roleUpdater }, updateChoice) {
-			const updateEmployeeRole = connect.query(`
+		.then(function ({ roleUpdater }) {
+			console.log(updateChoice);
+			console.log("PRE", roleUpdater);
+
+			if (roleUpdater === "Grocery Manager") {
+				newId = 2;
+			} else if (roleUpdater === "Grocery Stocker") {
+				newId = 3;
+			} else if (roleUpdater === "Grocery Cashier") {
+				newId = 4;
+			} else if (roleUpdater === "Electronics Manager") {
+				newId = 5;
+			} else if (roleUpdater === "Electronics Stocker") {
+				newId = 6;
+			} else if (roleUpdater === "Electronics Cashier") {
+				newId = 7;
+			} else if (roleUpdater === "Home Manager") {
+				newId = 8;
+			} else if (roleUpdater === "Home Stocker") {
+				newId = 9;
+			} else if (roleUpdater === "Home Cashier") {
+				newId = 10;
+			}
+
+			console.log("POST", newId);
+			const updateEmployeeRole = connect.query(
+				`
 				UPDATE employee	
-				SET role_id = 2
-				WHERE last_name = '${updateChoice}';`);
+				SET role_id = ${newId}
+				WHERE last_name = '${updateChoice}';`,
+				function (err, results) {
+					if (err) throw err;
+					console.table(results);
+				}
+			);
+			const displayAllEmployees = connect.query(
+				`SELECT * FROM employee_tracker_db.employee`,
+				function (err, results) {
+					if (err) throw err;
+					console.table(results);
+				}
+			);
 		});
 }
 
