@@ -117,10 +117,36 @@ function addPrompt() {
 			}
 		});
 }
-// three following function need code written so that a table pops up in the terminal with the data using cTable
-// function viewDepartments() {}
-// function viewRoles() {}
-// function viewEmployees() {}
+
+function viewDepartments() {
+	const allDepartments = connect.query(
+		"SELECT * FROM employee_tracker_db.department",
+		function (err, results) {
+			console.table(results);
+			process.exit();
+		}
+	);
+}
+
+function viewRoles() {
+	const allRoles = connect.query(
+		"SELECT * FROM employee_tracker_db.roles",
+		function (err, results) {
+			console.table(results);
+			process.exit();
+		}
+	);
+}
+
+function viewEmployees() {
+	const allEmployees = connect.query(
+		"SELECT * FROM employee_tracker_db.employee",
+		function (err, results) {
+			console.table(results);
+			process.exit();
+		}
+	);
+}
 
 function updateRole(updateChoice) {
 	console.log("inside of updateRole() :", updateChoice);
