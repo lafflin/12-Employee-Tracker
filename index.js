@@ -46,8 +46,8 @@ function viewPrompt() {
 				choices: ["Departments", "Roles", "Employees"],
 			},
 		])
-		.then(function () {
-			switch (viewPrompt) {
+		.then(function ({ viewingPrompt }) {
+			switch (viewingPrompt) {
 				case "Departments":
 					viewDepartments();
 					break;
@@ -85,15 +85,123 @@ function updatePrompt() {
 				],
 			},
 		])
-		.then(function () {
-			console.log(updatePrompt);
+		.then(function ({ updaterPrompt }) {
+			updateChoice = updaterPrompt;
+			// console.log(updateChoice);
+			updateRole(updateChoice);
 		});
 }
 
-// function addPrompt() {
-// 	// inquirer.prompt([{}]);
-// }
-
+function addPrompt() {
+	inquirer
+		.prompt([
+			{
+				type: "list",
+				name: "addingPrompt",
+				message: "What would you like to add to?",
+				choices: ["Departments", "Roles", "Employees"],
+			},
+		])
+		.then(function ({ addingPrompt }) {
+			console.log(addingPrompt);
+			switch (addingPrompt) {
+				case "Departments":
+					addDepartments();
+					break;
+				case "Roles":
+					addRoles();
+					break;
+				case "Employees":
+					addEmployees();
+					break;
+			}
+		});
+}
+// three following function need code written so that a table pops up in the terminal with the data using cTable
 // function viewDepartments() {}
 // function viewRoles() {}
 // function viewEmployees() {}
+
+function updateRole(updateChoice) {
+	console.log("inside of updateRole() :", updateChoice);
+	inquirer
+		.prompt([
+			{
+				type: "list",
+				name: "roleUpdater",
+				message: `What would you like ${updateChoice}'s new role to be?`,
+				choices: ["Grocery", "Electronics", "Home"],
+			},
+		])
+		// need to write the code to update the change in the db
+		.then(function ({ roleUpdater }) {});
+}
+
+function addDepartments() {
+	inquirer
+		.prompt([
+			{
+				type: "input",
+				name: "departmentNameAdd",
+				message: "What would you like to name the department?",
+			},
+		])
+		// functionality needed for adding department to db
+		.then(function ({ departmentNameAdd }) {});
+}
+
+function addRoles() {
+	inquirer
+		.prompt([
+			{
+				type: "input",
+				name: "roleNameAdd",
+				message: "What is the name of the role you would like to add?",
+			},
+			{
+				type: "input",
+				name: "roleSalaryAdd",
+				message: "What is the salary for this new role",
+			},
+			{
+				type: "input",
+				name: "roleDepartmentIdAdd",
+				message: "What is the department ID for this new role",
+			},
+		])
+		// functionality needed for adding roles to db
+		.then(function ({ roleNameAdd, roleSalaryAdd, roleDepartmentIdAdd }) {});
+}
+
+function addEmployees() {
+	inquirer
+		.prompt([
+			{
+				type: "input",
+				name: "employeeFirstNameAdd",
+				message: "What is the first name of the new employee?",
+			},
+			{
+				type: "input",
+				name: "employeeLastNameAdd",
+				message: "What is their last name",
+			},
+			{
+				type: "input",
+				name: "employeeRoleIDAdd",
+				message: "What is the ID of their new role",
+			},
+			{
+				type: "input",
+				name: "employeeManagerIDAdd",
+				message: "What is the ID of their new manager",
+			},
+		])
+		// functionality needed for adding employees to db
+		.then(function ({
+			employeeFirstNameAdd,
+			employeeLastNameAdd,
+			employeeRoleIDAdd,
+			employeeManagerIDAdd,
+		}) {});
+}
