@@ -148,8 +148,20 @@ function viewEmployees() {
 	);
 }
 
+function fullNameGenerator() {
+	connect.query(
+		'SELECT CONCAT(`first_name`, " ", `last_name`) AS `full_name` FROM `employee`',
+		function (err, results) {
+			fullName = results;
+			console.log("Inside of Generator", fullName);
+			if (err) throw err;
+		}
+	);
+}
+
 function updateRole(updateChoice) {
 	console.log("inside of updateRole() :", updateChoice);
+	fullNameGenerator();
 	inquirer
 		.prompt([
 			{
@@ -160,7 +172,12 @@ function updateRole(updateChoice) {
 			},
 		])
 		// need to write the code to update the change in the db
-		.then(function ({ roleUpdater }) {});
+		.then(function ({ roleUpdater }, updateChoice) {
+			const updateEmployeeRole = connect.query(`
+				UPDATE employee	
+				SET role_id = 2
+				WHERE last_name = '${updateChoice}';`);
+		});
 }
 
 function addDepartments() {
