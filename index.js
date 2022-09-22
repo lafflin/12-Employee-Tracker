@@ -8,12 +8,14 @@ const connect = require("./config/connection");
 
 // add comments, then make the readme+ walkthrough video.
 
+// connects us to the MySql server
 connect.connect(function (err) {
 	if (err) throw err;
 	console.log("Connected to MySql server");
 	openingPrompt();
 });
 
+// first prompt to decided which tree to send the user down
 function openingPrompt() {
 	inquirer
 		.prompt([
@@ -38,6 +40,8 @@ function openingPrompt() {
 			}
 		});
 }
+
+// when the user chooses to view, ask them what to view
 function viewPrompt() {
 	inquirer
 		.prompt([
@@ -63,6 +67,7 @@ function viewPrompt() {
 		});
 }
 
+// when the user chooses to update, ask who
 function updatePrompt() {
 	inquirer
 		.prompt([
@@ -94,6 +99,7 @@ function updatePrompt() {
 		});
 }
 
+// when the user chooses to add, ask what to add
 function addPrompt() {
 	inquirer
 		.prompt([
@@ -120,6 +126,7 @@ function addPrompt() {
 		});
 }
 
+// print a table of the departments into the console
 function viewDepartments() {
 	const allDepartments = connect.query(
 		"SELECT * FROM employee_tracker_db.department",
@@ -130,6 +137,7 @@ function viewDepartments() {
 	);
 }
 
+// print a table of the roles into the console
 function viewRoles() {
 	const allRoles = connect.query(
 		"SELECT * FROM employee_tracker_db.roles",
@@ -140,6 +148,7 @@ function viewRoles() {
 	);
 }
 
+// print a table of the employees into the console
 function viewEmployees() {
 	const allEmployees = connect.query(
 		"SELECT * FROM employee_tracker_db.employee",
@@ -150,17 +159,7 @@ function viewEmployees() {
 	);
 }
 
-// function fullNameGenerator() {
-// 	connect.query(
-// 		'SELECT CONCAT(`first_name`, " ", `last_name`) AS `full_name` FROM `employee`',
-// 		function (err, results) {
-// 			fullName = results;
-// 			// console.log("Inside of Generator", fullName);
-// 			if (err) throw err;
-// 		}
-// 	);
-// }
-
+// allows user to update role, after getting the name from them, give them the list of available roles to choose. then change their role in the database, and print the updated table to the console.
 function updateRole(updateChoice) {
 	// fullNameGenerator();
 	inquirer
@@ -228,6 +227,7 @@ function updateRole(updateChoice) {
 		});
 }
 
+// allows user to add a department to the database. give a name, it gets inserted into the table, then print to the console the updated table
 function addDepartments() {
 	inquirer
 		.prompt([
@@ -237,7 +237,6 @@ function addDepartments() {
 				message: "What would you like to name the department?",
 			},
 		])
-		// functionality needed for adding department to db
 		.then(function ({ departmentNameAdd }) {
 			const addDepartmentQuery = connect.query(
 				`INSERT INTO department(name)
@@ -258,6 +257,7 @@ function addDepartments() {
 		});
 }
 
+// allows user to add a roles to the database. give a name, salary, and the department ID, and then it gets inserted into the table, then print to the console the updated table
 function addRoles() {
 	inquirer
 		.prompt([
@@ -277,7 +277,6 @@ function addRoles() {
 				message: "What is the department ID for this new role",
 			},
 		])
-		// functionality needed for adding roles to db
 		.then(function ({ roleNameAdd, roleSalaryAdd, roleDepartmentIdAdd }) {
 			const addRoleQuery = connect.query(
 				`INSERT INTO roles (title, salary, department_id)
@@ -297,6 +296,7 @@ function addRoles() {
 		});
 }
 
+// allows user to add a employee to the database. give a first name, last name, their role id, and their new managers id. then it gets inserted into the table, and printed to the console is the updated table
 function addEmployees() {
 	inquirer
 		.prompt([
@@ -321,7 +321,6 @@ function addEmployees() {
 				message: "What is the ID of their new manager",
 			},
 		])
-		// functionality needed for adding employees to db
 		.then(function ({
 			employeeFirstNameAdd,
 			employeeLastNameAdd,
