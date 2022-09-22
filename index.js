@@ -6,6 +6,8 @@ const mysql = require("mysql2");
 const { listenerCount } = require("process");
 const connect = require("./config/connection");
 
+// add comments, then make the readme+ walkthrough video.
+
 connect.connect(function (err) {
 	if (err) throw err;
 	console.log("Connected to MySql server");
@@ -236,7 +238,24 @@ function addDepartments() {
 			},
 		])
 		// functionality needed for adding department to db
-		.then(function ({ departmentNameAdd }) {});
+		.then(function ({ departmentNameAdd }) {
+			const addDepartmentQuery = connect.query(
+				`INSERT INTO department(name)
+			VALUES ("${departmentNameAdd}");
+			`,
+				function (err, results) {
+					if (err) throw err;
+					console.table(results);
+				}
+			);
+			const displayAllDepartments = connect.query(
+				`SELECT * FROM employee_tracker_db.department`,
+				function (err, results) {
+					if (err) throw err;
+					console.table(results);
+				}
+			);
+		});
 }
 
 function addRoles() {
@@ -259,7 +278,23 @@ function addRoles() {
 			},
 		])
 		// functionality needed for adding roles to db
-		.then(function ({ roleNameAdd, roleSalaryAdd, roleDepartmentIdAdd }) {});
+		.then(function ({ roleNameAdd, roleSalaryAdd, roleDepartmentIdAdd }) {
+			const addRoleQuery = connect.query(
+				`INSERT INTO roles (title, salary, department_id)
+				VALUES ("${roleNameAdd}", ${roleSalaryAdd}, ${roleDepartmentIdAdd});`,
+				function (err, results) {
+					if (err) throw err;
+					console.table(results);
+				}
+			);
+			const displayAllRoles = connect.query(
+				`SELECT * FROM employee_tracker_db.roles`,
+				function (err, results) {
+					if (err) throw err;
+					console.table(results);
+				}
+			);
+		});
 }
 
 function addEmployees() {
@@ -292,5 +327,21 @@ function addEmployees() {
 			employeeLastNameAdd,
 			employeeRoleIDAdd,
 			employeeManagerIDAdd,
-		}) {});
+		}) {
+			const addEmployeeQuery = connect.query(
+				`INSERT INTO employee (first_name, last_name, role_id, manager_id)
+				VALUES ("${employeeFirstNameAdd}", "${employeeLastNameAdd}", ${employeeRoleIDAdd}, ${employeeManagerIDAdd});`,
+				function (err, results) {
+					if (err) throw err;
+					console.table(results);
+				}
+			);
+			const displayAllEmp = connect.query(
+				`SELECT * FROM employee_tracker_db.employee;`,
+				function (err, results) {
+					if (err) throw err;
+					console.table(results);
+				}
+			);
+		});
 }
